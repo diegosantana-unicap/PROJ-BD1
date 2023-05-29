@@ -61,7 +61,7 @@ GROUP BY pc.id_produto
 ORDER BY total_vendido DESC;
 
 						
--- TOP 5 produtos que possuem o maior preço em cada loja
+-- TOP 5 produtos mais caro de cada loja
 SELECT l.id AS id_loja, l.razao_social, p.id AS id_produto, p.nome AS nome_produto, p.preco
 FROM projbd.produto p
 JOIN projbd.estoque e ON p.id = e.id
