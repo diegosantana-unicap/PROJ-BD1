@@ -41,7 +41,7 @@ GROUP BY c.id;
 SELECT f.id, f.nome, f.sobrenome, COUNT(*) AS total_fornecido
 FROM projbd.fornecedor f
 JOIN projbd.produto p ON f.id = p.id
-JOIN projbd.estoque e ON p.id_estoque = e.id
+JOIN projbd.estoque e ON p.id = e.id
 JOIN projbd.loja l ON e.id_loja = l.id
 WHERE l.id = 1
 GROUP BY f.id
@@ -61,18 +61,19 @@ GROUP BY pc.id_produto
 ORDER BY total_vendido DESC;
 
 						
--- O produto mais caro vendido em 5 lojas
+-- TOP 5 produtos que possuem o maior preço em cada loja
 SELECT l.id AS id_loja, l.razao_social, p.id AS id_produto, p.nome AS nome_produto, p.preco
 FROM projbd.produto p
-JOIN projbd.estoque e ON p.id_estoque = e.id
+JOIN projbd.estoque e ON p.id = e.id
 JOIN projbd.loja l ON e.id_loja = l.id
 WHERE p.preco = (
   SELECT MAX(preco)
   FROM projbd.produto
-  WHERE id_estoque = e.id
+  WHERE id = e.id
   LIMIT 1 
 )
 GROUP BY l.id, p.id
+ORDER BY preco desc
 LIMIT 5;
 
 						

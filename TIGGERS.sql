@@ -1,23 +1,54 @@
--- Trigger para atualizar automaticamente a quantidade de produtos em estoque após uma compra:
-DELIMITER //
-CREATE TRIGGER atualizar_quantidade_estoque
+USE projbd;
+
+DELIMITER $$
+-- Após a inserção em 'produto' para atualizar o 'estoque':
+CREATE TRIGGER trg_after_insert_on_produto
+AFTER INSERT ON projbd.produto
+FOR EACH ROW
+BEGIN
+  UPDATE projbd.estoque 
+  SET quantidade = quantidade + 1 
+  WHERE id = NEW.id_estoque;
+END $$
+
+-- Acionado após a atualização em 'produto' para atualizar o 'estoque' quando o campo 'id_estoque' é alterado
+CREATE TRIGGER trg_after_update_on_produto
+AFTER UPDATE ON projbd.produto
+FOR EACH ROW
+BEGIN
+  IF OLD.id_estoque != NEW.id_estoque THEN
+    UPDATE projbd.estoque 
+    SET quantidade = quantidade - 1 
+    WHERE id = OLD.id_estoque;
+    
+    UPDATE projbd.estoque 
+    SET quantidade = quantidade + 1 
+    WHERE id = NEW.id_estoque;
+  END IF;
+END $$
+
+-- Acionado após a inserção em 'produtos_carrinhos_compra' para atualizar o 'estoque' subtraindo a quantidade inserida.
+CREATE TRIGGER trg_after_insert_on_produtos_carrinhos_compra
 AFTER INSERT ON projbd.produtos_carrinhos_compra
 FOR EACH ROW
 BEGIN
-  DECLARE quantidade_comprada INT;
-  
-  -- Obtém a quantidade comprada do produto
-  SELECT quantidade INTO quantidade_comprada
-  FROM projbd.produtos_carrinhos_compra
-  WHERE id = NEW.id;
-  
-  -- Atualiza a quantidade em estoque do produto
-  UPDATE projbd.estoque
-  SET quantidade = quantidade - quantidade_comprada
-  WHERE id = NEW.id_estoque;
-END //
+  UPDATE projbd.estoque 
+  SET quantidade = quantidade - NEW.quantidade
+  WHERE id = (SELECT id_estoque FROM projbd.produto WHERE id = NEW.id_produto);
+END $$
+
+-- Acionado após a exclusão em 'produtos_carrinhos_compra' para atualizar o 'estoque' adicionando a quantidade excluída.
+CREATE TRIGGER trg_after_delete_on_produtos_carrinhos_compra
+AFTER DELETE ON projbd.produtos_carrinhos_compra
+FOR EACH ROW
+BEGIN
+  UPDATE projbd.estoque 
+  SET quantidade = quantidade + OLD.quantidade 
+  WHERE id = (SELECT id_estoque FROM projbd.produto WHERE id = OLD.id_produto);
+END $$
 
 DELIMITER ;
+
 
 
 -- Trigger para registrar a data de atualização de um produto sempre que seu preço for alterado:

@@ -1,7 +1,7 @@
 CREATE SCHEMA projbd;
 
 CREATE TABLE projbd.usuario (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   sobrenome varchar(255) NOT NULL,
   cpf varchar(14) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE projbd.usuario (
 );
 
 CREATE TABLE projbd.cliente (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   sobrenome varchar(255) NOT NULL,
   cpf varchar(14) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE projbd.cliente (
 );
 
 CREATE TABLE projbd.fornecedor (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   sobrenome varchar(255) NOT NULL,
   razao_social varchar(255),
@@ -40,7 +40,7 @@ CREATE TABLE projbd.fornecedor (
 );
 
 CREATE TABLE projbd.loja (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   razao_social varchar(255) NOT NULL,
   cnpj varchar(14) NOT NULL,
   endereco varchar(999) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE projbd.loja (
 );
 
 CREATE TABLE projbd.estoque (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   id_loja int NOT NULL,
   id_produto int NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE projbd.estoque (
 );
 
 CREATE TABLE projbd.produto (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   cod_barra varchar(13) NOT NULL,
   preco DECIMAL(10,2) NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE projbd.produto (
 );
 
 CREATE TABLE projbd.categoria (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   nome varchar(255) NOT NULL,
   tipo_categoria int NOT NULL,
   descricao varchar(999) NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE projbd.categoria (
 );
 
 CREATE TABLE projbd.carrinho_compra (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   data_compra DATE NOT NULL,
   id_loja int NOT NULL,
   id_cliente int NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE projbd.carrinho_compra (
 );
 
 CREATE TABLE projbd.produtos_carrinhos_compra (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   quantidade int NOT NULL,
   id_produto int NOT NULL,
   id_carrinho_compra int NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE projbd.produtos_carrinhos_compra (
 );
 
 CREATE TABLE projbd.endereco (
-  id int NOT NULL,
+  id int NOT NULL AUTO_INCREMENT,
   cep varchar(8) NOT NULL,
   logradouro varchar(255) NOT NULL,
   uf varchar(2) NOT NULL,
